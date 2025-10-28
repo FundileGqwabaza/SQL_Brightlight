@@ -1,0 +1,54 @@
+----------------------------------------------------------------
+--To check all columns name & datatpye
+SELECT*
+FROM COFFEE_SHOP_DATASET;
+-----------------------------------------------------------------
+--To check categorical columns
+SELECT DISTINCT PRODUCT_CATEGORY
+FROM COFFEE_SHOP_DATASET;
+-------------------------------------------------------------------
+--To check product_type
+SELECT DISTINCT PRODUCT_TYPE
+FROM COFFEE_SHOP_DATASET;
+--------------------------------------------------------------------
+--To check product_detail
+SELECT DISTINCT PRODUCT_DETAIL
+FROM COFFEE_SHOP_DATASET;
+--------------------------------------------------------------------
+--Checking shop opening  & closingdate
+SELECT MIN (Transaction_date) AS shop_opening_date
+FROM COFFEE_SHOP_DATASET;
+SELECT MAX(TRANSACTION_DATE) AS shop_last_operating_date
+FROM COFFEE_SHOP_DATASET;
+
+SELECT MIN(TRANSACTION_TIME) AS shop_opening_hr
+FROM COFFEE_SHOP_DATASET;
+SELECT MAX(TRANSACTION_TIME) AS shop_closing_hr
+FROM COFFEE_SHOP_DATASET;
+-------------------------------------------------------------
+--Checking day of the week & month from date
+SELECT transaction_date,
+DAYNAME(transaction_date) AS day_name,
+CASE
+WHEN day_name IN('Sun','Sat')THEN'weekend'
+ELSE'weekday'
+END AS day_classification,
+MONTHNAME(transaction_date)AS month_name,
+TRANSACTION_TIME,
+CASE 
+    WHEN TRANSACTION_TIME BETWEEN '06:00:00' AND '11:59:59'THEN 'Morning'
+    WHEN TRANSACTION_TIME BETWEEN '12:00:00' AND '16:59:59'THEN 'Afternoon'
+    WHEN TRANSACTION_TIME >='17:00:00' THEN'evening'
+END AS  Time_classification,
+HOUR(transaction_time) AS hour_of_day,
+--categorical_data listing
+store_location,
+product_category,
+product_detail,
+product_type,
+-----IDs Count
+COUNT(DISTINCT transaction_id) AS number_of_sales,
+---Revenue calculation
+SUM(transaction_qty*unit_price) AS revenue,
+FROM COFFEE_SHOP_DATASET
+GROUP BY ALL;
